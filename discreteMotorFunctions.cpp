@@ -2,9 +2,6 @@
 #include <time.h>
 #include "E101.h"
 
-double speed; //Initializes variable for motor speed
-double time; //Initializes variable for turn-time
-
 int main ()
 {
     // This sets up the RPi hardware and ensures
@@ -28,29 +25,31 @@ int main ()
 }
 
 //Writes a PMW with a duty cycle of 0% to both motors, stopping both.
-void stopMotors();{
+void stopMotors(){
   set_motor(1, 0);
   set_motor(2, 0);
 }
 
 //Moves both motors in the "forward" direction with a given speed as a parameter
-void forwardMotors(speed){
+void forwardMotors(double speed){
   set_motor(1, speed);
   set_motor(2, speed);
                           }
 
 //Moves both motors in the "backward" direction with a given speed as a parameter
-void backMotors(speed);{
+void backMotors(double speed){
  forwardMotors(-speed);
 }
 
 //Turns both motors in opposite directions for [time] milliseconds, with a speed of [speed]
-void spotTurnLeft(speed, time){
+void spotTurnLeft(double speed,double time){
   set_motor(1, speed);
   set_motor(2, -speed);
   sleep1 (0, time);
   stopMotors();
                                 }
-void spotTurnRight(speed, time){
+
+                                
+void spotTurnRight(double speed,double time){
   spotTurnLeft(-speed, time);
                                 }
