@@ -22,4 +22,3 @@ int set_servo(int chan, int value);
 int connect_to_server( char server_addr[15],int port);
 int send_to_server(char message[24]);
 int receive_from_server(char message[24]);
-
