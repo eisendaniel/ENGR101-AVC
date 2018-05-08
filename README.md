@@ -13,3 +13,5 @@ Raspberry Pi's IP address: 10.140.30.148
 IPv6: FE80::7e3:a72c:63c3:bd73/64
 
 motor[10mm, 12mm, 25.5mm]
+
+sudo ./"filename"
