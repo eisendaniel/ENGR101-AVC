@@ -31,6 +31,20 @@ void spotTurnRight(double speed, double time)
 {
   spotTurnLeft(-speed, time);
 }
+//Takes an image, then scans the pixels along the middle of the image for white/black pixels, then attempts to convert them to a basic "Error signal" = the integer returned gives how "right" of the line the AVC is.
+double getErrorSignal()
+{
+take_picture();
+for(int j=-160; j<159;j+1)
+ {
+ //Get colour (modify code so it starts from the left and goes to the right)
+ //Multiply colour value by current J value
+ //Add the result to a "final value"
+ //Once everything else is done, return the final value as an error signal.
+ //NO CODE IS HERE YET, I WILL DO THIS LATER -L
+ }
+
+}
 int main ()
 {
     // This sets up the RPi hardware and ensures
