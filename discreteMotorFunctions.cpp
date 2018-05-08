@@ -7,19 +7,26 @@ int main ()
     // This sets up the RPi hardware and ensures
     // everything is working correctly
     init ();
-    // Writes PWM with a duty cycle of 0% to motor 1
-    set_motor (1 ,0);
+    // Writes PWM with a duty cycle of 100% to both motors
+    forwardMotors(255);
 
-    // Waits for 0.5 seconds (500000 microseconds )
+    // Waits for 1.5 seconds (1500000 microseconds )
+    sleep1 (1 ,500000);
+
+    // Writes a duty cycle of 100% to motor 1 and -100% to motor 2 (making it turn on the spot)
+    spotTurnLeft(255);
     sleep1 (0 ,500000);
 
-    // Writes PWM with a duty cycle of 100% to motor 1
-    set_motor (1 ,255);
+    // Writes PWM with a duty cycle of 0% to both motors
+    stopMotors();
     sleep1 (0 ,500000);
 
-    // Writes PWM with a duty cycle of 0% to motor 1
-    set_motor (1 ,0);
-    sleep1 (0 ,500000);
+    //Writes a signal of 150 (Approximately half) to motor 2, and -150 to motor 1, making it spot-turn
+    spotTurnRight(150);
+    sleep1 (0, 500000);
+
+    //Stops both motors, again
+    stopMotors();
 
     return 0;
 }
