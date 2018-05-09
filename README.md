@@ -15,3 +15,6 @@ IPv6: FE80::7e3:a72c:63c3:bd73/64
 motor[10mm, 12mm, 25.5mm]
 
 sudo ./"filename"
+
+motor 1 is Right
+motor 2 is Left 
