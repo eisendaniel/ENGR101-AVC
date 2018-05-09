@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <time.h>
 #include "E101.h"
-
+bool debug=true; //Sets the program into "debugging" mode. This will be phased out later on.
 //Writes a PMW with a duty cycle of 0% to both motors, stopping both.
+char phase = 2;//DEBUGGING ONLY, THIS SHOULD START AT PHASE 1!
+
 void stopMotors()
 {
   set_motor(1, 0);
@@ -37,12 +39,17 @@ double getErrorSignal()
 take_picture();
 for(int j=-160; j<159;j+1)
  {
+  char white = get_pixel((j+160),120,3);
+  double currentError = white * (j*5);
+
+  double finalError = finalError + currentError;
  //Get colour (modify code so it starts from the left and goes to the right)
  //Multiply colour value by current J value
  //Add the result to a "final value"
  //Once everything else is done, return the final value as an error signal.
  //NO CODE IS HERE YET, I WILL DO THIS LATER -L
  }
+ printf("THE FINAL ERROR VALUE IS:%d",finalError);
 
 }
 int main ()
@@ -50,7 +57,6 @@ int main ()
     // This sets up the RPi hardware and ensures
     // everything is working correctly
     init ();
-    char phase = 2;//DEBUGGING ONLY, THIS SHOULD START AT PHASE 1!
 
     //Sets the AVC to "phase 1", where it follows a simple maze-following protocol
     while(phase==1)
@@ -59,8 +65,8 @@ int main ()
 
     }
 
+    while(debug==true){getErrorSignal();sleep1(5,0);}
     //sets the AVC to "phase 2", where it follows advanced maze-following protocols for sharp right-and-left hand turns. Might be integrated into the above function.
-
     while(phase==2)
     {
       printf("No red detected!");
