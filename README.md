@@ -16,5 +16,7 @@ motor[10mm, 12mm, 25.5mm]
 
 sudo ./"filename"
 
+gcc filename.cpp -o filename -le101
+
 motor 1 is Right
-motor 2 is Left 
+motor 2 is Left
