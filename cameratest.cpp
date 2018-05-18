@@ -37,9 +37,21 @@ void spotTurnRight(double speed, double time)
 double getErrorSignal()
 {
 take_picture();
-for(int j=-160; j<159;j+1)
+int threshold; //This initializes the max and min variables which help the program to see static "black or white" rather than shades of gray.
+//I'M COMMENTING THIS BECAUSE I SUCK WITH INITIALIZING VARIABLES AND IT PROBABLY DOESN'T WORK
+int min=255;
+int max=0;
+for(int k=-0; j<320;j+1)
+{
+if ((get_pixel((k),120,3))<min){min=get_pixel((k),120,3);}
+if ((get_pixel((k),120,3))>max){max=get_pixel((k),120,3);}
+threshold=((min+max)/2);
+}
+
+for(int j=-160; j<159;j+1)//Loop for finding the error signal. Starts at -160 rather than 0 so that values further out from the center are amplified when multiplied with J
  {
-  char white = get_pixel((j+160),120,3);
+   if((get_pixel((j+160),120,3))>threshold){char white = 1;} else{char white = 0;}
+//  char white = get_pixel((j+160),120,3);
   double currentError = white * (j*5);
 
   double finalError = finalError + currentError;
