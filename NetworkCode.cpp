@@ -5,7 +5,7 @@ int NetworkConnect () {
 	connect_to_server("192.168.1.2", 1024);
 	//connect to server of IP and port
 	
-	Char Message[24]; 
+	char Message[24]; 
 	//create char array
 	
 	Message = ("P", "l", "e", "a", "s", "e"); 
