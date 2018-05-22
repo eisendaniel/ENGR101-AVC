@@ -23,3 +23,12 @@ int NetworkConnect () {
 	return 0;
 	//end
 }
+int main () {
+	#include <stdio.h>
+	#include <time.h>
+	#include "E101.h"
+	
+	init();
+	NetworkConnect();
+	return 0;
+}
