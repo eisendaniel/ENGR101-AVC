@@ -1,8 +1,9 @@
-int NetworkConnect () {
-	init();
-	//initialise
-	
-	connect_to_server("192.168.1.2", 1024);
+#include <stdio.h>
+#include <time.h>
+#include "E101.h"
+
+int NetworkConnect () {	
+	connect_to_server("130.195.6.196", 1024);
 	//connect to server of IP and port
 	
 	char Message[24]; 
@@ -24,10 +25,6 @@ int NetworkConnect () {
 	//end
 }
 int main () {
-	#include <stdio.h>
-	#include <time.h>
-	#include "E101.h"
-	
 	init();
 	NetworkConnect();
 	return 0;
