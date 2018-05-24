@@ -107,8 +107,15 @@ void Q3Turn(bool clockwise)
 }
 
 bool canSeeQ4() {
-	//Fill this out to detect red square
-	return false;
+	take_picture();
+      //display_picture(1,1); - For debugging only
+        //Ends the loop if it detects the red square which signals the box-maze
+        //Compound Boolean (I'm sorry) which triggers if there is red light and NOT green OR blue light, as white is a mix of all 3.
+        if((get_pixel(160,120,0)>170)&&(get_pixel(160,120,1)<80)&&(get_pixel(160,120,2)<80))
+        {
+          return true;
+        }
+				else{return false;}
 }
 
 //=======================Quadrant Four=======================
