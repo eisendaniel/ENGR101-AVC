@@ -134,7 +134,8 @@ void quadThreeLoop()
 	while(true) {
 		take_picture();
 		if (canSeeQ4())
-		{quadFourLoop();}
+		{qdr=4;
+		return;}
 		else if (canSeeLine())
 		{
 			//Robot is on track
@@ -165,8 +166,9 @@ void quadTwoLoop()
 		{
 			if (numWhiteInImg(220, 230) > minWhiteForQ3)
 			{
-				//Robot has entered Q3
-				break;
+				//Robot detcts a large amount of white (has entered Quadrant 3)
+				qdr=3;
+				return;
 			}
 			else
 			{
@@ -184,7 +186,6 @@ void quadTwoLoop()
 		}
 		sleep1(0, loopDelay);
 	}
-	quadThreeLoop();
 }
 
 //=======================Quadrant One=======================
@@ -254,6 +255,14 @@ int get_ir(int pin)
 int main()
 {
   init();
+	int qdr=1; //Short for
   sleep1(15, 0);
-  quadOne();
+	while(true)//Ensures that whatever the current quadrant is, it'll run that method until it's updated to run a new quadrant
+	{
+	//I'm sorry for the demonCode(tm), but it works - L
+	if(qdr=1){quadOne();}
+	elseif(qdr=2){quadTwoLoop();}
+	elseif(qdr=3){quadThreeLoop();}
+	elseif(qdr=4){quadFourLoop();}
+	else{break;}}	
 }
