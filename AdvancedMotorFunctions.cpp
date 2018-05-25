@@ -17,7 +17,6 @@ void setSpeed(int left, int right)
 	if (left < -254) left = -254;
 	if (right > 254) right = 254;
 	if (right < -254) right = -254;
-	right *= -1;
 	set_motor(1, left);
 	set_motor(2, right);
 }
@@ -211,7 +210,8 @@ void quadOne()
 	send_to_server(Message);
 	//sends received message back to server
 
-	quadTwoLoop();
+	qdr=2;
+	return;
 }
 
 int image_analysis()
@@ -255,14 +255,14 @@ int get_ir(int pin)
 int main()
 {
   init();
-	int qdr=1; //Short for
-  sleep1(15, 0);
+	int qdr=2; //Sets the start quadrant. FOR THE LOVE OF GOD, SET THIS TO 1 WHEN NOT DEBUGGING!!!!!!!
+  sleep1(2, 0);
 	while(true)//Ensures that whatever the current quadrant is, it'll run that method until it's updated to run a new quadrant
 	{
 	//I'm sorry for the demonCode(tm), but it works - L
 	if(qdr=1){quadOne();}
-	elseif(qdr=2){quadTwoLoop();}
-	elseif(qdr=3){quadThreeLoop();}
-	elseif(qdr=4){quadFourLoop();}
-	else{break;}}	
+	else if(qdr=2){quadTwoLoop();}
+	else if(qdr=3){quadThreeLoop();}
+	else if(qdr=4){quadFourLoop();}
+	else{break;}}
 }
