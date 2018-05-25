@@ -6,6 +6,7 @@
 int lineWhiteThreshold = 127;
 int minWhiteToSeeLine = 10000000;
 float kp = 0.00005; //Will need to adjust this
+int qdr=2; //Sets the start quadrant. FOR THE LOVE OF GOD, SET THIS TO 1 WHEN NOT DEBUGGING!!!!!!!
 int loopDelay = 100000;
 int baseSpeed = 50;
 int minWhiteForQ3 = 10005000;
@@ -191,24 +192,21 @@ void quadTwoLoop()
 
 void quadOne()
 {
-	//Add code for opening gate here
-	connect_to_server("130.195.6.196", 1024);
-	//connect to server of IP and port
-
-	send_to_server("Please");
-	//sends message to the server
-
-	char Message[24];
-	//create char array
-
-	receive_from_server(Message);
-	//receives message from server, sets to array 'Message'
-
-	printf("%s", Message);
-	//print server output
-
-	send_to_server(Message);
-	//sends received message back to server
+//set char array to contain IP
+char serverIP[15] = {"130.195.6.196"};
+//connect to server of IP and port
+connect_to_server(serverIP, 1024);
+//create char array
+char Message[24] = {"Please"};
+//sends message to the server
+send_to_server(Message);
+//receives message from server, sets to array 'Message'
+receive_from_server(Message);
+//print server output
+//printf("%s", Message); //Re-impliment if testing!
+//sends received message back to server
+send_to_server(Message);
+//end
 
 	qdr=2;
 	return;
@@ -255,14 +253,13 @@ int get_ir(int pin)
 int main()
 {
   init();
-	int qdr=2; //Sets the start quadrant. FOR THE LOVE OF GOD, SET THIS TO 1 WHEN NOT DEBUGGING!!!!!!!
   sleep1(2, 0);
 	while(true)//Ensures that whatever the current quadrant is, it'll run that method until it's updated to run a new quadrant
 	{
 	//I'm sorry for the demonCode(tm), but it works - L
-	if(qdr=1){quadOne();}
-	else if(qdr=2){quadTwoLoop();}
-	else if(qdr=3){quadThreeLoop();}
-	else if(qdr=4){quadFourLoop();}
-	else{break;}}
+	if(qdr==1){quadOne();}
+	else if(qdr==2){quadTwoLoop();}
+	else if(qdr==3){quadThreeLoop();}
+	else if(qdr==4){quadFourLoop();}
+	else{break;}}//If this triggers, it means something's gone horrifically wrong. Just stand by and wait for the implosion. This should literally NEVER happen.
 }
