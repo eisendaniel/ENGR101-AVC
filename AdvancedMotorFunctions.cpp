@@ -8,7 +8,7 @@ int minWhiteToSeeLine = 10000000;
 float kp = 0.00005; //Will need to adjust this
 int qdr=2; //Sets the start quadrant. FOR THE LOVE OF GOD, SET THIS TO 1 WHEN NOT DEBUGGING!!!!!!!
 int loopDelay = 100000;
-int baseSpeed = 50;
+int baseSpeed = 100;
 int minWhiteForQ3 = 10005000;
 
 //=======================General Functions=======================
