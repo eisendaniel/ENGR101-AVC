@@ -22,5 +22,28 @@ motor 1 is Right
 motor 2 is Left
 
 
-To turn on/off the "auto-run", use:
-rc.local
+
+USING FILEZILLA:
+Launch Filezilla
+•
+Host:  greta-pt.ecs.vuw.ac.nz
+•
+Username:  your-ECS-student-username
+•
+Password:  your-ECS-student-password
+•
+Port:22
+•
+Quickconnect
+
+
+AUTO-RUN SCRIPT
+The first is to place the name and location of you executable file in the file /etc/rc.local. To open this file on your RPi type:
+
+sudo nano /etc/rc.local.
+
+This will open the file in the text editor nano and allow you to edit it. All you need to do now is add a line to the bottom of it telling it where your executable file is. Say your file is called rpidrive in the ENGR101 folder of your home directory. Then the line you need to add to the /etc/rc.local file is:
+
+./home/pi/ENGR101/rpidrive &
+
+Then the next time you turn your RPi on this script will run (as root) automatically.
