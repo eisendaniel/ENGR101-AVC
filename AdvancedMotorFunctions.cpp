@@ -18,8 +18,8 @@ void setSpeed(int left, int right)
 	if (left < -254) left = -254;
 	if (right > 254) right = 254;
 	if (right < -254) right = -254;
-	set_motor(1, left);
-	set_motor(2, right);
+	set_motor(2, left);
+	set_motor(1, right);
 }
 
 
@@ -126,17 +126,17 @@ double getErrorSignal() {
 	int min = 255;
 	int max = 0;
 	for (int k = 0; k < 320; k++) {
-		if ((get_pixel((k), 120, 3)) < min) {
-			min = get_pixel((k), 120, 3);
+		if ((get_pixel(120, (k),  3)) < min) {
+			min = get_pixel(120,(k),3);
 		}
-		if ((get_pixel((k), 120, 3)) > max) {
-			max = get_pixel((k), 120, 3);
+		if ((get_pixel(120, (k),  3)) > max) {
+			max = get_pixel(120,(k), 3);
 		}
 		threshold = ((min + max) / 2);
 	}
 	for (int j = -160; j < 159; j++) //Loop for finding the error signal. Starts at -160 rather than 0 so that values further out from the center are amplified when multiplied with J
 	{
-		if ((get_pixel((j + 160), 120, 3)) > threshold) {
+		if ((get_pixel(120,(j + 160), 3)) > threshold) {
 			bool white = true;
 		} else {
 			bool white = false;
