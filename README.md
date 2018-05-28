@@ -20,3 +20,7 @@ gcc filename.cpp -o filename -le101
 
 motor 1 is Right
 motor 2 is Left
+
+
+To turn on/off the "auto-run", use:
+rc.local
