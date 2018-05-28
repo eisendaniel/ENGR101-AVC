@@ -47,22 +47,15 @@ if ((get_pixel((k),120,3))<min){min=get_pixel((k),120,3);}
 if ((get_pixel((k),120,3))>max){max=get_pixel((k),120,3);}
 threshold=((min+max)/2);
 }
-
 for(int j=-160; j<159;j++)//Loop for finding the error signal. Starts at -160 rather than 0 so that values further out from the center are amplified when multiplied with J
  {
-   if((get_pixel((j+160),120,3))>threshold){char white = 1;} else{char white = 0;}
+   if((get_pixel((j+160),120,3))>threshold){bool white = true;} else{bool white = false;}
 //  char white = get_pixel((j+160),120,3);
   double currentError = white * (j*5);
 
   double finalError = finalError + currentError;
- //Get colour (modify code so it starts from the left and goes to the right)
- //Multiply colour value by current J value
- //Add the result to a "final value"
- //Once everything else is done, return the final value as an error signal.
- //NO CODE IS HERE YET, I WILL DO THIS LATER -L
  }
- printf("THE FINAL ERROR VALUE IS:%d",finalError);
-
+return(finalError);
 }
 int main ()
 {

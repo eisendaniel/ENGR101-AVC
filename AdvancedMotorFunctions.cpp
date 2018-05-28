@@ -118,13 +118,43 @@ bool canSeeQ4() {
 				else{return false;}
 }
 
+//===Alternate Error Signal Code===
+double getErrorSignal() {
+	take_picture();
+	int threshold; //This initializes the max and min variables which help the program to see static "black or white" rather than shades of gray.
+	//I'M COMMENTING THIS BECAUSE I SUCK WITH INITIALIZING VARIABLES AND IT PROBABLY DOESN'T WORK
+	int min = 255;
+	int max = 0;
+	for (int k = 0; k < 320; k++) {
+		if ((get_pixel((k), 120, 3)) < min) {
+			min = get_pixel((k), 120, 3);
+		}
+		if ((get_pixel((k), 120, 3)) > max) {
+			max = get_pixel((k), 120, 3);
+		}
+		threshold = ((min + max) / 2);
+	}
+	for (int j = -160; j < 159; j++) //Loop for finding the error signal. Starts at -160 rather than 0 so that values further out from the center are amplified when multiplied with J
+	{
+		if ((get_pixel((j + 160), 120, 3)) > threshold) {
+			bool white = true;
+		} else {
+			bool white = false;
+		}
+		//  char white = get_pixel((j+160),120,3);
+		double currentError = white * (j * 5);
+		double finalError = finalError + currentError;
+	}
+	return (finalError);
+}
+
 //=======================Quadrant Four=======================
 
 void quadFourLoop() {
 
 }
 
-//=======================Quadrant Three=======================
+//=======================Quadrant Three: Original=======================
 
 void quadThreeLoop()
 {
@@ -139,7 +169,7 @@ void quadThreeLoop()
 		else if (canSeeLine())
 		{
 			//Robot is on track
-			printf("Can see line \n");
+			//printf("Can see line \n"); - Debug only
 			errorSignal = getLineErrorSignal(220, 230);
 			setSpeed(baseSpeed + errorSignal*kp, baseSpeed - errorSignal*kp);
 		}
@@ -154,7 +184,26 @@ void quadThreeLoop()
 	}
 }
 
-//=======================Quadrant Two=======================
+//=======================Quadrant two: Beta Test=======================
+void quadTwoBetaLoop()
+{
+	take_picture();
+	if (canSeeLine())//Checks if there's a large amount of white. If so, goes to Quad 3.
+	{
+		if (numWhiteInImg(220, 230) > minWhiteForQ3)
+		{
+			//Robot detcts a large amount of white (has entered Quadrant 3)
+			qdr=3;
+			return;
+		}
+
+	errorSignalBeta=getErrorSignal();
+	setSpeed(baseSpeed + errorSignalBeta*kp, baseSpeed - errorSignalBeta*kp);
+
+}
+
+
+//=======================Quadrant Two: Original=======================
 
 void quadTwoLoop()
 {
@@ -173,7 +222,7 @@ void quadTwoLoop()
 			else
 			{
 				//Robot is on track
-				printf("Can see line \n");
+				//printf("Can see line \n");
 				errorSignal = getLineErrorSignal(220, 230);
 				setSpeed(baseSpeed + errorSignal*kp, baseSpeed - errorSignal*kp);
 			}
@@ -261,5 +310,6 @@ int main()
 	else if(qdr==2){quadTwoLoop();}
 	else if(qdr==3){quadThreeLoop();}
 	else if(qdr==4){quadFourLoop();}
+	else if (qdr==5){quadTwoBetaLoop();}//DEBUGGING ONLY!
 	else{break;}}//If this triggers, it means something's gone horrifically wrong. Just stand by and wait for the implosion. This should literally NEVER happen.
 }
