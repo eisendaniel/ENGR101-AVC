@@ -32,14 +32,32 @@ void Q4 ()
       distLeft = read_digital(SL);
       distFront = read_digital(SF);
       distRight = read_digital(SR);
+      error = distRight-distLeft;
 
-      //Robot will go through time gate with this code - will need to
-      //add some code here to tell it - if detects red, stop, if no obstacle go,
-      //if there is obstacle, wait and try again.
+      //If robot detects red line before time gate
+      if((get_pixel(160,120,0)>170)&&(get_pixel(160,120,1)<80)&&(get_pixel(160,120,2)<80))
+      {
+        set_motor(leftMotor, 0);
+        set_motor(rightMotor, 0);
+        isDriving = false;
+        while (isDriving == false)
+        {   //While botty is stopped
+            distFront = read_digital(SF); //Check front sensor
+            if (!( (distFront > 100) && (distFront < 500) ) ) //If clear ahead
+            {
+              set_motor(leftMotor, 127);
+              set_motor(rightMotor, 127);
+              isDriving = true;
+            }
+            else //Gate is shut
+            {
+              sleep1(0, 999999); //Sleep 1 second
+            }
+        }
+      }
 
       if (isDriving == true)
       {  //Keep robot centered
-        error = distRight-distLeft;
         if ( (distLeft == distRight) || (error < 20) )
         //If centred, or little error in positioning
         {  //Set both motors to default speed
