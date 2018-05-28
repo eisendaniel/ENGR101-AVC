@@ -58,7 +58,7 @@ void Q4 ()
 
       if (isDriving == true)
       {  //Keep robot centered
-        if ( (distLeft == distRight) || (error < 20) )
+        if ( (distLeft == distRight) || (error < 20) || (error > -20) )
         //If centred, or little error in positioning
         {  //Set both motors to default speed
           leftMotorSpeed = 127;
