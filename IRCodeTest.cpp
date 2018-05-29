@@ -13,10 +13,10 @@ void Q4 ()
   set_motor(1, 127); //set motors to default speed
   set_motor(2, 127);
 
-  //Assumes sensor position D0 as left, D1 as front, D2 as right
-  int SL = 0;
-  int SF = 1;
-  int SR = 2;
+  //Assumes sensor position D2 as left, D0 as front, D1 as right
+  int SL = 2;
+  int SF = 0;
+  int SR = 1;
   int distFront;
   int distLeft;
   int distRight;
