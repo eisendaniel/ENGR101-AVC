@@ -81,7 +81,7 @@ void Q4 ()
         set_motor(leftMotor, 0);
         set_motor(rightMotor, 0);
         sleep1(0, 200000); //Sleep 0.2 seconds
-        if (distLeft > distRight)
+        if (distLeft < distRight)
         { //Turn left
           set_motor(leftMotor, -127);
           set_motor(rightMotor, 127);
@@ -91,7 +91,7 @@ void Q4 ()
           sleep1(0, 200000); //Sleep 0.2s - go forward a little
           isDriving = true;
         }
-        else if (distLeft < distRight)
+        else if (distLeft > distRight)
         { //Turn right
           set_motor(leftMotor, 127);
           set_motor(rightMotor, -127);
