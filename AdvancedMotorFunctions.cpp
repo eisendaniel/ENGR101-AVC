@@ -5,8 +5,8 @@
 
 int lineWhiteThreshold = 127;
 int minWhiteToSeeLine = 10000000;
-float kp = 0.00005; //Will need to adjust this
-int qdr=2; //Sets the start quadrant. FOR THE LOVE OF GOD, SET THIS TO 1 WHEN NOT DEBUGGING!!!!!!!
+float kp = 0.005; //Will need to adjust this
+int qdr=5; //Sets the start quadrant. FOR THE LOVE OF GOD, SET THIS TO 1 WHEN NOT DEBUGGING!!!!!!!
 int loopDelay = 100000;
 int baseSpeed = 100;
 int minWhiteForQ3 = 10005000;
@@ -120,12 +120,15 @@ bool canSeeQ4() {
 
 //===Alternate Error Signal Code===
 double getErrorSignal() {
+	bool white=false;
+	double finalError;
+
 	take_picture();
 	int threshold; //This initializes the max and min variables which help the program to see static "black or white" rather than shades of gray.
 	//I'M COMMENTING THIS BECAUSE I SUCK WITH INITIALIZING VARIABLES AND IT PROBABLY DOESN'T WORK
 	int min = 255;
 	int max = 0;
-	for (int k = 0; k < 320; k++) {
+	for (int k = 0; k < 319; k++) {
 		if ((get_pixel(120, (k),  3)) < min) {
 			min = get_pixel(120,(k),3);
 		}
@@ -136,14 +139,14 @@ double getErrorSignal() {
 	}
 	for (int j = -160; j < 159; j++) //Loop for finding the error signal. Starts at -160 rather than 0 so that values further out from the center are amplified when multiplied with J
 	{
-		if ((get_pixel(120,(j + 160), 3)) > threshold) {
-			bool white = true;
+		if ((get_pixel(120, (j+160), 3)) > threshold) {
+			white = true;
 		} else {
-			bool white = false;
+			white = false;
 		}
 		//  char white = get_pixel((j+160),120,3);
 		double currentError = white * (j * 5);
-		double finalError = finalError + currentError;
+		finalError = finalError + currentError;
 	}
 	return (finalError);
 }
@@ -195,13 +198,13 @@ void quadTwoBetaLoop()
 			//Robot detcts a large amount of white (has entered Quadrant 3)
 			qdr=3;
 			return;
-		}
+		}}
 
-	errorSignalBeta=getErrorSignal();
+	double errorSignalBeta=getErrorSignal();
 	setSpeed(baseSpeed + errorSignalBeta*kp, baseSpeed - errorSignalBeta*kp);
 
-}
 
+}
 
 //=======================Quadrant Two: Original=======================
 
@@ -306,10 +309,12 @@ int main()
 	while(true)//Ensures that whatever the current quadrant is, it'll run that method until it's updated to run a new quadrant
 	{
 	//I'm sorry for the demonCode(tm), but it works - L
-	if(qdr==1){quadOne();}
+	if(canSeeQ4()){setSpeed(0,0);return 0;}
+	else if(qdr==1){quadOne();}
 	else if(qdr==2){quadTwoLoop();}
 	else if(qdr==3){quadThreeLoop();}
 	else if(qdr==4){quadFourLoop();}
 	else if (qdr==5){quadTwoBetaLoop();}//DEBUGGING ONLY!
-	else{break;}}//If this triggers, it means something's gone horrifically wrong. Just stand by and wait for the implosion. This should literally NEVER happen.
+	else{setSpeed(0,0); printf("WHAT DID YOU DO?! Shutting down and awaiting the singularity."); return(-1);}}
+//If this triggers, it means something's gone horrifically wrong. This should literally NEVER trigger.
 }
