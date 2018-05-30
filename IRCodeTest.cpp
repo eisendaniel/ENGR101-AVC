@@ -6,10 +6,6 @@
 
 void Q4 ()
 {
-  //180 degree turn - will need to adjust these values
-  set_motor(1, 127);
-  set_motor(2, -127);
-  sleep1(0, 999999); //sleep 1 second
   set_motor(1, 127); //set motors to default speed
   set_motor(2, 127);
 
