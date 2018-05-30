@@ -68,8 +68,8 @@ void Q4 ()
         }
         else
         {  //Modify motor speeds based on the level of positioning error
-          leftMotorSpeed = leftMotorSpeed + (error * 0.1);
-          rightMotorSpeed = rightMotorSpeed - (error * 0.1);
+          leftMotorSpeed = leftMotorSpeed - (error * 0.1);
+          rightMotorSpeed = rightMotorSpeed + (error * 0.1);
           set_motor(leftMotor, leftMotorSpeed);
           set_motor(rightMotor, rightMotorSpeed);
         }
