@@ -156,6 +156,15 @@ double getErrorSignal()
 	return (finalError);
 }
 
+void quadThreeRightAngleTurn()
+{
+  setSpeed(0,0);
+  sleep1(0,500000);
+	setSpeed(-70,70);//The speed at which it turns. Both values must be equal, just in opposite directions!
+	sleep1(3,500000);//This is how long it turns on-the-spot for. Needs to be long enough to go 90 degrees, roughly!
+	setSpeed(0,0);
+}
+
 //=======================Quadrant Four=======================
 
 void quadFourLoop() {
@@ -297,7 +306,7 @@ int main()
 		if(qdr==1){quadOne();}
 		else if (canSeeQ4()){setSpeed(0,0); return 0;}
 		else if(qdr==2){quadTwoLoop();}
-		else if(qdr==3){quadThreeLoop();}
+		else if(qdr==3){quadThreeBetaLoop();}
 		else if(qdr==4){quadFourLoop();}
 		else{setSpeed(0,0); printf("WHAT DID YOU DO?! Shutting down and awaiting the singularity."); break;}
 	}//If this triggers, it means something's gone horrifically wrong. Just stand by and wait for the implosion. This should literally NEVER happen.
