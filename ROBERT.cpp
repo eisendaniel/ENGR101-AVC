@@ -119,26 +119,26 @@ bool canSeeQ4() {
 }
 
 //===Alternate Error Signal Code===
-double getErrorSignal() 
+double getErrorSignal()
 {
 	bool white = false;
 	double finalError;
-	
+
 	take_picture();
 	int threshold; //This initializes the max and min variables which help the program to see static "black or white" rather than shades of gray.
 	//I'M COMMENTING THIS BECAUSE I SUCK WITH INITIALIZING VARIABLES AND IT PROBABLY DOESN'T WORK
 	int min = 255;
 	int max = 0;
-	for (int k = 0; k < 319; k++) 
+	for (int k = 0; k < 319; k++)
 	{
-		if ((get_pixel(120,(k), 3)) < min) 
+		if ((get_pixel(120,(k), 3)) < min)
 		{min = get_pixel(120, (k), 3);}
 		printf("Getting minimum!");
-		
-		if ((get_pixel(120, k, 3)) > max) 
+
+		if ((get_pixel(120, k, 3)) > max)
 		{max = get_pixel(120, k, 3);}
 		printf("Getting Maximum!");
-		
+
 		threshold = ((min + max) / 2);
 	}
 	for (int j = -160; j < 159; j++) //Loop for finding the error signal. Starts at -160 rather than 0 so that values further out from the center are amplified when multiplied with J
@@ -159,6 +159,21 @@ double getErrorSignal()
 //=======================Quadrant Four=======================
 
 void quadFourLoop() {
+
+}
+
+//Quadrant Three: Modified////////////////////////////////////////////////
+void quadThreeBetaLoop()
+{
+	double errorSignalBeta = getErrorSignal();
+	setSpeed(baseSpeed + errorSignalBeta*kp, baseSpeed - errorSignalBeta*kp);
+	if(!canSeeLine)
+	{Q3Turn(false);
+	}
+if(canSeeQ4)
+{qdr=4;
+return;}
+
 
 }
 
