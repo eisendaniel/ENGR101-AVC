@@ -54,24 +54,23 @@ void Q4 ()
 
       if (isDriving == true)
       {  //Keep robot centered
-        if ( (distLeft == distRight) || (error < 20) || (error > -20) )
-        //If centred, or little error in positioning
-        {  //Set both motors to default speed
-          leftMotorSpeed = 127;
-          rightMotorSpeed = 127;
-          set_motor(leftMotor, leftMotorSpeed);
-          set_motor(rightMotor, rightMotorSpeed);
-        }
-        else
-        {  //Modify motor speeds based on the level of positioning error
-          leftMotorSpeed = leftMotorSpeed - (error * 0.1);
-          rightMotorSpeed = rightMotorSpeed + (error * 0.1);
-          set_motor(leftMotor, leftMotorSpeed);
-          set_motor(rightMotor, rightMotorSpeed);
-        }
+          if (distLeft < 400)
+          {
+            set_motor(leftMotor, 160);
+            set_motor(rightMotor, 127);
+            sleep1(0, 100000);
+            set_motor(leftMotor, 127);
+          }
+          if (distRight < 400)
+          {
+            set_motor(leftMotor, 127);
+            set_motor(rightMotor, 160);
+            sleep1(0, 100000);
+            set_motor(rightMotor, 127);
+          }
       }
 
-      if ( (distFront > 100) && (distFront < 500) ) //If going to crash into wall
+      if ( (distFront > 650) && (distFront < 750) ) //If going to crash into wall
       {
         isDriving = false;
         set_motor(leftMotor, 0);
@@ -100,8 +99,8 @@ void Q4 ()
         else
         {
           //pAnIc!! (if neither side has a gap)
-          set_motor (leftMotor, 0);
-          set_motor (rightMotor, 0);
+          set_motor (leftMotor, -127);
+          set_motor (rightMotor, -127);
           break;
         }
       }
