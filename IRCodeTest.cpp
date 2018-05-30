@@ -29,9 +29,9 @@ void Q4 ()
 
   while (true)
   {
-      distLeft = read_digital(SL);
-      distFront = read_digital(SF);
-      distRight = read_digital(SR);
+      distLeft = read_analog(SL);
+      distFront = read_analog(SF);
+      distRight = read_analog(SR);
       error = distRight-distLeft;
 
       //If robot detects red line before time gate
@@ -42,7 +42,7 @@ void Q4 ()
         isDriving = false;
         while (isDriving == false)
         {   //While botty is stopped
-            distFront = read_digital(SF); //Check front sensor
+            distFront = read_analog(SF); //Check front sensor
             if (!( (distFront > 100) && (distFront < 500) ) ) //If clear ahead
             {
               set_motor(leftMotor, 127);
