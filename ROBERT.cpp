@@ -156,12 +156,31 @@ double getErrorSignal()
 	return (finalError);
 }
 
+void isLookingAtBlack()//Detects if the robot's gone off the line or not.
+{
+		take_picture();
+		int threshold; //This initializes the max and min variables which help the program to see static "black or white" rather than shades of gray.
+		//I'M COMMENTING THIS BECAUSE I SUCK WITH INITIALIZING VARIABLES AND IT PROBABLY DOESN'T WORK
+		int min = 255;
+		int max = 0;
+		for(int j=0; j<239; j++){//Scans every row
+			for (int k = 0; k < 319; k++){//Scans every column
+				if ((get_pixel(j,k,3)) < min)
+				{min = get_pixel(j,k,3);}
+
+				if ((get_pixel(120, k, 3)) > max)
+				{max = get_pixel(120, k, 3);}
+				threshold = ((min + max) / 2);
+			}}//And returns the Threshold - maximum and minimum brightnesses divided by two. The "range of brightness"
+		if(threshold<90){quadThreeRightAngleTurn();}//If the "range of brightness" is small, that means it's likely gone off the line, so it should stop and turn 90 degrees.
+	}
+
 void quadThreeRightAngleTurn()
 {
   setSpeed(0,0);
   sleep1(0,500000);
-	setSpeed(-70,70);//The speed at which it turns. Both values must be equal, just in opposite directions!
-	sleep1(3,500000);//This is how long it turns on-the-spot for. Needs to be long enough to go 90 degrees, roughly!
+	setSpeed(-200,200);//The speed at which it turns. Both values must be equal, just in opposite directions!
+	sleep1(0,820000);//This is how long it turns on-the-spot for. Needs to be long enough to go 90 degrees, roughly!
 	setSpeed(0,0);
 }
 
@@ -176,9 +195,8 @@ void quadThreeBetaLoop()
 {
 	double errorSignalBeta = getErrorSignal();
 	setSpeed(baseSpeed + errorSignalBeta*kp, baseSpeed - errorSignalBeta*kp);
-	if(!canSeeLine)
-	{Q3Turn(false);
-	}
+	isLookingAtBlack();
+
 if(canSeeQ4)
 {qdr=4;
 return;}
@@ -219,6 +237,11 @@ void quadThreeLoop()
 //=======================Quadrant two=======================
 void quadTwoLoop()
 {
+	isLookingAtBlack();
+
+if(canSeeQ4)//Merging q2 and q3 REMOVE IF IT DOESN'T WORK
+{qdr=4;
+return;}
 	/*take_picture();
 	if (canSeeLine())//Checks if there's a large amount of white. If so, goes to Quad 3.
 	{
