@@ -222,6 +222,7 @@ void quadFourLoop()
               set_motor(leftMotor, 127);
               set_motor(rightMotor, 127);
               isDriving = true;
+              break;
             }
             else //Gate is shut
             {
@@ -232,12 +233,7 @@ void quadFourLoop()
 
       if (isDriving == true)
       {  //Keep robot centered
-          if (((distLeft > 600) && (distLeft < 700)) && ((distRight > 500) && (distRight < 600)))
-          { //Keep straight - already centred
-            set_motor(leftMotor, 127);
-            set_motor(rightMotor, 127);
-          }
-          else if ((distLeft > 550) && (distRight < 450))
+          if ((distLeft > 550) && (distRight < 450))
           { //Sway right - too close to left
             set_motor(leftMotor, 187);
             set_motor(rightMotor, 127);
@@ -249,6 +245,11 @@ void quadFourLoop()
             set_motor(leftMotor, 127);
             set_motor(rightMotor, 187);
             sleep1(0, 400000);
+            set_motor(rightMotor, 127);
+          }
+          else (((distLeft > 600) && (distLeft < 700)) && ((distRight > 500) && (distRight < 600)))
+          { //Keep straight - already centred
+            set_motor(leftMotor, 127);
             set_motor(rightMotor, 127);
           }
       }
