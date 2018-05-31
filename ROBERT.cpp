@@ -187,7 +187,7 @@ void isLookingAtBlack()//Detects if the robot's gone off the line or not.
 
 void quadFourLoop() 
 {
-	set_motor(1, 127); //set motors to default speed
+  set_motor(1, 127); //set motors to default speed
   set_motor(2, 127);
 
   //Assumes sensor position D2 as left, D0 as front, D1 as right
