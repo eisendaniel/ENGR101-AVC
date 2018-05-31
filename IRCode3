@@ -1,0 +1,112 @@
+#include <stdio.h>
+#include <time.h>
+#include "E101.h"
+
+//Test this as a standalone 1st - good luck :/
+
+void quadFourLoop()
+{
+  set_motor(1, 80); //set motors to default speed
+  set_motor(2, 80);
+
+  //Assumes sensor position D2 as left, D0 as front, D1 as right
+  int SL = 2;
+  int SF = 0;
+  int SR = 1;
+  int distFront;
+  int distLeft;
+  int distRight;
+  int leftMotor = 2;
+  int rightMotor = 1;
+
+  while (true)
+  {
+      distLeft = read_analog(SL);
+      distFront = read_analog(SF);
+      distRight = read_analog(SR);
+
+      //If robot detects red line before time gate
+      take_picture();
+      if((get_pixel(160,120,0)>170)&&(get_pixel(160,120,1)<80)&&(get_pixel(160,120,2)<80))
+      {
+        set_motor(leftMotor, 0);
+        set_motor(rightMotor, 0);
+        while (true)
+        {   //While botty is stopped
+            distFront = read_analog(SF); //Check front sensor
+            if (distFront < 300) //If clear ahead
+            {
+              set_motor(leftMotor, 80);
+              set_motor(rightMotor, 80);
+              break;
+            }
+            else //Gate is shut
+            {
+              sleep1(0, 999999); //Sleep 1 second
+            }
+        }
+      }
+
+      //Keep robot centered
+      if ((distLeft > 450) && (distRight < 470))
+      { //Sway right - too close to left
+        set_motor(leftMotor, 120);
+        set_motor(rightMotor, 80);
+        sleep1(0, 400000);
+        set_motor(leftMotor, 80);
+      }
+      else if (((distLeft > 580) && (distLeft < 800)) && (distRight < 550))
+      { //Sway left - too close to right
+        set_motor(leftMotor, 80);
+        set_motor(rightMotor, 120);
+        sleep1(0, 400000);
+        set_motor(rightMotor, 80);
+      }
+      else (((distLeft > 580) && (distLeft < 720)) && ((distRight > 480) && (distRight < 620)))
+      { //Keep straight - already centred
+        set_motor(leftMotor, 80);
+        set_motor(rightMotor, 80);
+      }
+
+	  if (distFront > 550)
+	  {
+  		if (distLeft < 300)
+  		{ //Turn left
+  			set_motor(leftMotor, 0);
+  			set_motor(rightMotor, 0);
+  			sleep1(0,500000);
+  			set_motor(leftMotor, -200);
+  			set_motor(rightMotor, 200);
+  			sleep1(0,870000);
+        set_motor(leftMotor, 0);
+        set_motor(rightMotor, 0);
+        sleep1(0, 500000);
+  			set_motor(leftMotor, 80);
+  			set_motor(leftMotor, 80);
+        sleep1(0, 200000);
+  		}
+  		else //(distRight < 100)
+  		{ //Turn right
+  			set_motor(leftMotor, 0);
+  			set_motor(rightMotor, 0);
+  			sleep1(0,500000);
+  			set_motor(leftMotor, 200);
+  			set_motor(rightMotor, -200);
+  			sleep1(0,870000);
+        set_motor(leftMotor, 0);
+        set_motor(rightMotor, 0);
+        sleep1(0, 500000);
+  			set_motor(leftMotor, 80);
+  			set_motor(leftMotor, 80);
+        sleep1(0, 200000);
+  		}
+	  }
+  }
+}
+
+int main ()
+{
+  init();
+  quadFourLoop();
+  return 0;
+}
