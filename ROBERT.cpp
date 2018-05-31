@@ -5,7 +5,7 @@
 
 int lineWhiteThreshold = 127;
 int minWhiteToSeeLine = 10000000;
-float kp = 0.003; //Will need to adjust this
+float kp = 0.005; //Will need to adjust this
 int qdr = 1; //Sets the start quadrant. FOR THE LOVE OF GOD, SET THIS TO 1 WHEN NOT DEBUGGING!!!!!!!
 int loopDelay = 100000;
 int baseSpeed = 110;
@@ -133,17 +133,14 @@ double getErrorSignal()
 	{
 		if ((get_pixel(120,(k), 3)) < min)
 		{min = get_pixel(120, (k), 3);}
-		printf("Getting minimum!");
 
 		if ((get_pixel(120, k, 3)) > max)
 		{max = get_pixel(120, k, 3);}
-		printf("Getting Maximum!");
 
 		threshold = ((min + max) / 2);
 	}
 	for (int j = -160; j < 159; j++) //Loop for finding the error signal. Starts at -160 rather than 0 so that values further out from the center are amplified when multiplied with J
 	{
-		printf("Running get_pixel with row of 120, column of %d\n\n",(j+160));
 		if ((get_pixel(120, (j+160), 3)) > threshold) {
 			white = true;
 		} else {
@@ -161,19 +158,19 @@ void quadThreeRightAngleTurn()
   setSpeed(0,0);
   sleep1(0,500000);
 	setSpeed(-200,200);//The speed at which it turns. Both values must be equal, just in opposite directions!
-	sleep1(0,820000);//This is how long it turns on-the-spot for. Needs to be long enough to go 90 degrees, roughly!
+	sleep1(0,410000);//This is how long it turns on-the-spot for. Needs to be long enough to go 90 degrees, roughly!
 	setSpeed(0,0);
 }
 
 void isLookingAtBlack()//Detects if the robot's gone off the line or not.
-{ printf("Starting 'islookingatblack'");
+{
 		take_picture();
 		int threshold; //This initializes the max and min variables which help the program to see static "black or white" rather than shades of gray.
 		//I'M COMMENTING THIS BECAUSE I SUCK WITH INITIALIZING VARIABLES AND IT PROBABLY DOESN'T WORK
 		int min = 255;
 		int max = 0;
-		for(int j=0; j<239; j++){//Scans every row
-			for (int k = 0; k < 319; k++){//Scans every column
+		for(int j=0; j<239; j+=4){//Scans every row
+			for (int k = 0; k < 319; k+=4){//Scans every column
 				if ((get_pixel(j,k,3)) < min)
 				{min = get_pixel(j,k,3);}
 
@@ -181,7 +178,7 @@ void isLookingAtBlack()//Detects if the robot's gone off the line or not.
 				{max = get_pixel(120, k, 3);}
 				threshold = ((min + max) / 2);
 			}}//And returns the Threshold - maximum and minimum brightnesses divided by two. The "range of brightness"
-		if(threshold<90){quadThreeRightAngleTurn();}//If the "range of brightness" is small, that means it's likely gone off the line, so it should stop and turn 90 degrees.
+		if(threshold<45){quadThreeRightAngleTurn();}//If the "range of brightness" is small, that means it's likely gone off the line, so it should stop and turn 90 degrees.
 	}
 
 
@@ -190,6 +187,7 @@ void isLookingAtBlack()//Detects if the robot's gone off the line or not.
 
 void quadFourLoop() {
 	printf("IT HIT QUAD 4 SOMEHOW!");
+	qdr=5;
 }
 
 //Quadrant Three: Modified////////////////////////////////////////////////
@@ -199,7 +197,7 @@ void quadThreeBetaLoop()
 	setSpeed(baseSpeed + errorSignalBeta*kp, baseSpeed - errorSignalBeta*kp);
 	isLookingAtBlack();
 
-if(canSeeQ4)
+if(canSeeQ4())
 {qdr=4;
 return;}
 
@@ -241,7 +239,7 @@ void quadTwoLoop()
 {
 	isLookingAtBlack();
 
-if(canSeeQ4)//Merging q2 and q3 REMOVE IF IT DOESN'T WORK
+if(canSeeQ4())//Merging q2 and q3 REMOVE IF IT DOESN'T WORK
 {qdr=4;
 return;}
 	/*take_picture();
@@ -263,21 +261,19 @@ return;}
 
 void quadOne()
 {
-//set char array to contain IP
-char serverIP[15] = {"130.195.6.196"};
-//connect to server of IP and port
-connect_to_server(serverIP, 1024);
-//create char array
-char Message[24] = {"Please"};
-//sends message to the server
-send_to_server(Message);
-//receives message from server, sets to array 'Message'
-receive_from_server(Message);
-//print server output
-//printf("%s", Message); //Re-impliment if testing!
-//sends received message back to server
-send_to_server(Message);
-//end
+    char serverIP[15] = {"130.195.6.196"};
+	//connect to server of IP and port
+	connect_to_server(serverIP, 1024);
+	//create char array
+	char Message[24] = {"Please"};
+	//sends message to the server
+	send_to_server(Message);
+	//receives message from server, sets to array 'Message'
+	receive_from_server(Message);
+	//print server output
+	printf("%s", Message);
+	//sends received message back to server
+	send_to_server(Message);
 
 	qdr=2;
 	return;
