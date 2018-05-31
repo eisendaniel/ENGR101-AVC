@@ -5,10 +5,10 @@
 
 int lineWhiteThreshold = 127;
 int minWhiteToSeeLine = 10000000;
-float kp = 0.005; //Will need to adjust this
-int qdr = 5; //Sets the start quadrant. FOR THE LOVE OF GOD, SET THIS TO 1 WHEN NOT DEBUGGING!!!!!!!
+float kp = 0.003; //Will need to adjust this
+int qdr = 1; //Sets the start quadrant. FOR THE LOVE OF GOD, SET THIS TO 1 WHEN NOT DEBUGGING!!!!!!!
 int loopDelay = 100000;
-int baseSpeed = 100;
+int baseSpeed = 110;
 int minWhiteForQ3 = 10005000;
 
 //=======================General Functions=======================
@@ -119,26 +119,26 @@ bool canSeeQ4() {
 }
 
 //===Alternate Error Signal Code===
-double getErrorSignal() 
+double getErrorSignal()
 {
 	bool white = false;
 	double finalError;
-	
+
 	take_picture();
 	int threshold; //This initializes the max and min variables which help the program to see static "black or white" rather than shades of gray.
 	//I'M COMMENTING THIS BECAUSE I SUCK WITH INITIALIZING VARIABLES AND IT PROBABLY DOESN'T WORK
 	int min = 255;
 	int max = 0;
-	for (int k = 0; k < 319; k++) 
+	for (int k = 0; k < 319; k++)
 	{
-		if ((get_pixel(120,(k), 3)) < min) 
+		if ((get_pixel(120,(k), 3)) < min)
 		{min = get_pixel(120, (k), 3);}
 		printf("Getting minimum!");
-		
-		if ((get_pixel(120, k, 3)) > max) 
+
+		if ((get_pixel(120, k, 3)) > max)
 		{max = get_pixel(120, k, 3);}
 		printf("Getting Maximum!");
-		
+
 		threshold = ((min + max) / 2);
 	}
 	for (int j = -160; j < 159; j++) //Loop for finding the error signal. Starts at -160 rather than 0 so that values further out from the center are amplified when multiplied with J
@@ -156,9 +156,53 @@ double getErrorSignal()
 	return (finalError);
 }
 
+void quadThreeRightAngleTurn()
+{
+  setSpeed(0,0);
+  sleep1(0,500000);
+	setSpeed(-200,200);//The speed at which it turns. Both values must be equal, just in opposite directions!
+	sleep1(0,820000);//This is how long it turns on-the-spot for. Needs to be long enough to go 90 degrees, roughly!
+	setSpeed(0,0);
+}
+
+void isLookingAtBlack()//Detects if the robot's gone off the line or not.
+{ printf("Starting 'islookingatblack'");
+		take_picture();
+		int threshold; //This initializes the max and min variables which help the program to see static "black or white" rather than shades of gray.
+		//I'M COMMENTING THIS BECAUSE I SUCK WITH INITIALIZING VARIABLES AND IT PROBABLY DOESN'T WORK
+		int min = 255;
+		int max = 0;
+		for(int j=0; j<239; j++){//Scans every row
+			for (int k = 0; k < 319; k++){//Scans every column
+				if ((get_pixel(j,k,3)) < min)
+				{min = get_pixel(j,k,3);}
+
+				if ((get_pixel(120, k, 3)) > max)
+				{max = get_pixel(120, k, 3);}
+				threshold = ((min + max) / 2);
+			}}//And returns the Threshold - maximum and minimum brightnesses divided by two. The "range of brightness"
+		if(threshold<90){quadThreeRightAngleTurn();}//If the "range of brightness" is small, that means it's likely gone off the line, so it should stop and turn 90 degrees.
+	}
+
+
+
 //=======================Quadrant Four=======================
 
 void quadFourLoop() {
+	printf("IT HIT QUAD 4 SOMEHOW!");
+}
+
+//Quadrant Three: Modified////////////////////////////////////////////////
+void quadThreeBetaLoop()
+{
+	double errorSignalBeta = getErrorSignal();
+	setSpeed(baseSpeed + errorSignalBeta*kp, baseSpeed - errorSignalBeta*kp);
+	isLookingAtBlack();
+
+if(canSeeQ4)
+{qdr=4;
+return;}
+
 
 }
 
@@ -192,9 +236,14 @@ void quadThreeLoop()
 	}
 }
 
-//=======================Quadrant two: Beta Test=======================
-void quadTwoBetaLoop()
+//=======================Quadrant two=======================
+void quadTwoLoop()
 {
+	isLookingAtBlack();
+
+if(canSeeQ4)//Merging q2 and q3 REMOVE IF IT DOESN'T WORK
+{qdr=4;
+return;}
 	/*take_picture();
 	if (canSeeLine())//Checks if there's a large amount of white. If so, goes to Quad 3.
 	{
@@ -209,39 +258,6 @@ void quadTwoBetaLoop()
 	setSpeed(baseSpeed + errorSignalBeta*kp, baseSpeed - errorSignalBeta*kp);
 }
 
-//=======================Quadrant Two: Original=======================
-
-void quadTwoLoop()
-{
-	double errorSignal;
-	while(true)
-	{
-		take_picture();
-		if (canSeeLine())
-		{
-			if (numWhiteInImg(220, 230) > minWhiteForQ3)
-			{
-				//Robot detcts a large amount of white (has entered Quadrant 3)
-				qdr=3;
-				return;
-			}
-			else
-			{
-				//Robot is on track
-				//printf("Can see line \n");
-				errorSignal = getLineErrorSignal(220, 230);
-				setSpeed(baseSpeed + errorSignal*kp, baseSpeed - errorSignal*kp);
-			}
-		}
-		else
-		{
-			//Robot is not on track
-			printf("Can't see line");
-			reverseUntilSeeLine();
-		}
-		sleep1(0, loopDelay);
-	}
-}
 
 //=======================Quadrant One=======================
 
@@ -313,11 +329,10 @@ int main()
 	{
 		//I'm sorry for the demonCode(tm), but it works - L
 		if(qdr==1){quadOne();}
-		else if (canSeeQ4()){setSpeed(0,0); return 0;}
+		else if (canSeeQ4()){setSpeed(0,0); printf("It saw red, shutting down!"); return 0;}
 		else if(qdr==2){quadTwoLoop();}
-		else if(qdr==3){quadThreeLoop();}
+		else if(qdr==3){quadThreeBetaLoop();}
 		else if(qdr==4){quadFourLoop();}
-		else if (qdr==5){quadTwoBetaLoop();}//DEBUGGING ONLY!
 		else{setSpeed(0,0); printf("WHAT DID YOU DO?! Shutting down and awaiting the singularity."); break;}
 	}//If this triggers, it means something's gone horrifically wrong. Just stand by and wait for the implosion. This should literally NEVER happen.
 }
