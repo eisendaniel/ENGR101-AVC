@@ -156,8 +156,17 @@ double getErrorSignal()
 	return (finalError);
 }
 
-void isLookingAtBlack()//Detects if the robot's gone off the line or not.
+void quadThreeRightAngleTurn()
 {
+  setSpeed(0,0);
+  sleep1(0,500000);
+	setSpeed(-200,200);//The speed at which it turns. Both values must be equal, just in opposite directions!
+	sleep1(0,820000);//This is how long it turns on-the-spot for. Needs to be long enough to go 90 degrees, roughly!
+	setSpeed(0,0);
+}
+
+void isLookingAtBlack()//Detects if the robot's gone off the line or not.
+{ printf("Starting 'islookingatblack'");
 		take_picture();
 		int threshold; //This initializes the max and min variables which help the program to see static "black or white" rather than shades of gray.
 		//I'M COMMENTING THIS BECAUSE I SUCK WITH INITIALIZING VARIABLES AND IT PROBABLY DOESN'T WORK
@@ -175,19 +184,12 @@ void isLookingAtBlack()//Detects if the robot's gone off the line or not.
 		if(threshold<90){quadThreeRightAngleTurn();}//If the "range of brightness" is small, that means it's likely gone off the line, so it should stop and turn 90 degrees.
 	}
 
-void quadThreeRightAngleTurn()
-{
-  setSpeed(0,0);
-  sleep1(0,500000);
-	setSpeed(-200,200);//The speed at which it turns. Both values must be equal, just in opposite directions!
-	sleep1(0,820000);//This is how long it turns on-the-spot for. Needs to be long enough to go 90 degrees, roughly!
-	setSpeed(0,0);
-}
+
 
 //=======================Quadrant Four=======================
 
 void quadFourLoop() {
-
+	printf("IT HIT QUAD 4 SOMEHOW!");
 }
 
 //Quadrant Three: Modified////////////////////////////////////////////////
@@ -277,7 +279,7 @@ receive_from_server(Message);
 send_to_server(Message);
 //end
 
-	qdr=5;
+	qdr=2;
 	return;
 }
 
@@ -327,7 +329,7 @@ int main()
 	{
 		//I'm sorry for the demonCode(tm), but it works - L
 		if(qdr==1){quadOne();}
-		else if (canSeeQ4()){setSpeed(0,0); return 0;}
+		else if (canSeeQ4()){setSpeed(0,0); printf("It saw red, shutting down!"); return 0;}
 		else if(qdr==2){quadTwoLoop();}
 		else if(qdr==3){quadThreeBetaLoop();}
 		else if(qdr==4){quadFourLoop();}
