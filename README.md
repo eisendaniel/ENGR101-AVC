@@ -8,9 +8,7 @@ SSH connection:
 Password:"raspberry"
 
 NOTE: IP CHANGES. ADDRESSES BELOW ARE RENDERED USELESS UNLESS WE FIGURE OUT HOW TO SET THE IP AS STATIC.
-Raspberry Pi's IP address: 169.254.160.240
-Raspberry Pi's IP address: 10.140.30.148
-IPv6: FE80::7e3:a72c:63c3:bd73/64
+Raspberry Pi's IP address: 10.140.30.119
 
 motor[10mm, 12mm, 25.5mm]
 
