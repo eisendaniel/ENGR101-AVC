@@ -178,7 +178,7 @@ void isLookingAtBlack()//Detects if the robot's gone off the line or not.
 				{max = get_pixel(120, k, 3);}
 				threshold = ((min + max) / 2);
 			}}//And returns the Threshold - maximum and minimum brightnesses divided by two. The "range of brightness"
-		if(threshold<45){quadThreeRightAngleTurn();}//If the "range of brightness" is small, that means it's likely gone off the line, so it should stop and turn 90 degrees.
+		if(threshold<55){quadThreeRightAngleTurn();}//If the "range of brightness" is small, that means it's likely gone off the line, so it should stop and turn 90 degrees.
 	}
 
 
@@ -187,8 +187,8 @@ void isLookingAtBlack()//Detects if the robot's gone off the line or not.
 
 void quadFourLoop() 
 {
-  set_motor(1, 127); //set motors to default speed
-  set_motor(2, 127);
+  set_motor(1, 80); //set motors to default speed
+  set_motor(2, 80);
 
   //Assumes sensor position D2 as left, D0 as front, D1 as right
   int SL = 2;
@@ -199,7 +199,6 @@ void quadFourLoop()
   int distRight;
   int leftMotor = 2;
   int rightMotor = 1;
-  bool isDriving = true;
 
   while (true)
   {
@@ -213,15 +212,13 @@ void quadFourLoop()
       {
         set_motor(leftMotor, 0);
         set_motor(rightMotor, 0);
-        isDriving = false;
-        while (isDriving == false)
+        while (true)
         {   //While botty is stopped
             distFront = read_analog(SF); //Check front sensor
             if (distFront < 300) //If clear ahead
             {
-              set_motor(leftMotor, 127);
-              set_motor(rightMotor, 127);
-              isDriving = true;
+              set_motor(leftMotor, 80);
+              set_motor(rightMotor, 80);
               break;
             }
             else //Gate is shut
@@ -231,53 +228,59 @@ void quadFourLoop()
         }
       }
 
-      if (isDriving == true)
-      {  //Keep robot centered
-          if ((distLeft > 550) && (distRight < 450))
-          { //Sway right - too close to left
-            set_motor(leftMotor, 187);
-            set_motor(rightMotor, 127);
-            sleep1(0, 400000);
-            set_motor(leftMotor, 127);
-          }
-          else if (((distLeft > 600) && (distLeft < 700)) && (distRight < 600))
-          { //Sway left - too close to right
-            set_motor(leftMotor, 127);
-            set_motor(rightMotor, 187);
-            sleep1(0, 400000);
-            set_motor(rightMotor, 127);
-          }
-          else (((distLeft > 600) && (distLeft < 700)) && ((distRight > 500) && (distRight < 600)))
-          { //Keep straight - already centred
-            set_motor(leftMotor, 127);
-            set_motor(rightMotor, 127);
-          }
+      //Keep robot centered
+      if ((distLeft > 450) && (distRight < 470))
+      { //Sway right - too close to left
+        set_motor(leftMotor, 120);
+        set_motor(rightMotor, 80);
+        sleep1(0, 400000);
+        set_motor(leftMotor, 80);
+      }
+      else if (((distLeft > 580) && (distLeft < 800)) && (distRight < 550))
+      { //Sway left - too close to right
+        set_motor(leftMotor, 80);
+        set_motor(rightMotor, 120);
+        sleep1(0, 400000);
+        set_motor(rightMotor, 80);
+      }
+      else 
+      { //Keep straight - already centred
+        set_motor(leftMotor, 80);
+        set_motor(rightMotor, 80);
       }
 
 	  if (distFront > 550)
 	  {
-		if (distLeft < 300)
-		{ //Turn left
-			set_motor(leftMotor, 0);
-			set_motor(rightMotor, 0);
-			sleep1(0,500000);
-			set_motor(leftMotor, -200);
-			set_motor(rightMotor, 200);
-			sleep1(0,870000);
-			set_motor(leftMotor, 127);
-			set_motor(leftMotor, 127);
-		}  
-		else //(distRight < 100)
-		{ //Turn right
-			set_motor(leftMotor, 0);
-			set_motor(rightMotor, 0);
-			sleep1(0,500000);
-			set_motor(leftMotor, 200);
-			set_motor(rightMotor, -200);
-			sleep1(0,870000);
-			set_motor(leftMotor, 127);
-			set_motor(leftMotor, 127);
-		}
+  		if (distLeft < 300)
+  		{ //Turn left
+  			set_motor(leftMotor, 0);
+  			set_motor(rightMotor, 0);
+  			sleep1(0,500000);
+  			set_motor(leftMotor, -200);
+  			set_motor(rightMotor, 200);
+  			sleep1(0,420000);
+        set_motor(leftMotor, 0);
+        set_motor(rightMotor, 0);
+        sleep1(0, 500000);
+  			set_motor(leftMotor, 80);
+  			set_motor(leftMotor, 80);
+        sleep1(0, 200000);
+  		}
+  		else //(distRight < 100)
+  		{ //Turn right
+  			set_motor(leftMotor, 0);
+  			set_motor(rightMotor, 0);
+  			sleep1(0,500000);
+  			set_motor(leftMotor, 200);
+  			set_motor(rightMotor, -200);
+  			sleep1(0,420000);
+        set_motor(leftMotor, 0);
+        set_motor(rightMotor, 0);
+        sleep1(0, 500000);
+  			set_motor(leftMotor, 80);
+  			set_motor(leftMotor, 80);
+        sleep1(0, 200000);
+  		}
 	  }
   }
 }
